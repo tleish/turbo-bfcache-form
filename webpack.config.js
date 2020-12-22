@@ -9,7 +9,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'turbo-bfcache-form.js',
-    library: 'TurboLinks BFCache Form',
+    library: 'Turbo BFCache Form',
     libraryTarget: 'umd',
     globalObject: 'this',
     umdNamedDefine: true,

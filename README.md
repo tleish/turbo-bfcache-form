@@ -1,4 +1,4 @@
-The intent of this library is to add support for bfcache (back-forward cache) forms when using [TurboLinks](https://github.com/turbo/turbo) ?
+The intent of this library is to add support for bfcache (back-forward cache) forms when using [Hotwired/Turbo](https://github.com/hotwired/turbo) ?
 
 ### SUPPORTED BROWSERS
 
