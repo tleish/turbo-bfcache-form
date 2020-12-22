@@ -1,0 +1,64 @@
+{
+  "name": "turbo-bfcache-form",
+  "version": "0.2.1",
+  "description": "Turbo Bfcache forms",
+  "main": "./dist/turbo-bfcache-form.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start:dev": "webpack --mode=development --watch --progress",
+    "build": "webpack --mode=production",
+    "prepublishOnly": "webpack --mode=production",
+    "lint": "eslint \"{src,__tests__}/*.js\"",
+    "lint:fix": "eslint \"{src,__tests__}/*.js\" --fix",
+    "format": "prettier --write \"src/*.js\" \"__tests__/*.js\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tleish/turbo-bfcache-form.git"
+  },
+  "keywords": [
+    "turbo",
+    "bfcache",
+    "forms"
+  ],
+  "author": "tleish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tleish/turbo-bfcache-form/issues"
+  },
+  "homepage": "https://github.com/tleish/turbo-bfcache-form#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/core": "^7.11.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-macros": "^2.8.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "html-loader": "^1.0.0",
+    "jest": "^24.9.0",
+    "jest-raw-loader": "^1.0.1",
+    "jest-serializer-vue": "^2.0.2",
+    "jest-transform-stub": "^2.0.0",
+    "jsdom": "^16.4.0",
+    "mocha": "^6.1.0",
+    "mochapack": "^1.1.13",
+    "mutationobserver-shim": "^0.3.7",
+    "prettier": "^2.0.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.10.1"
+  }
+}
