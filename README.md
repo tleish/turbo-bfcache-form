@@ -11,8 +11,8 @@ Note: if using this library with IE you must polyfill [Element.closest()](https:
 
 ### INSTALLATION
 
-1. Install `yarn add tleish/turbolinks-bfcache-form`
-2. Import and initialize TubolinksBfcacheForm and start the listener
+1. Install `yarn add tleish/turbo-bfcache-form`
+2. Import and initialize TuboBfcacheForm and start the listener
 
 ```javascript
 import Turbo from "@hotwired/turbo"
