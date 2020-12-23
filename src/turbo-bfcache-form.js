@@ -56,6 +56,7 @@ class TurboFormBfcache {
 }
 
 export default TurboFormBfcache;
+TurboFormBfcache.start();
 
 class TurboForm {
   constructor(form, turboCacheControl) {

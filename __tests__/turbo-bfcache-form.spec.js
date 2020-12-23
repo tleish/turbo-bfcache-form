@@ -35,7 +35,6 @@ describe('FormController', () => {
       });
 
       it('resets cached form as cached for optimization', () => {
-        TurboBfcacheForm.start();
         input.value = 'test@email.com';
         TurboBfcacheForm.change({ target: input });
         input.value = '';
