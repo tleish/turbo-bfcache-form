@@ -101,7 +101,7 @@ class FormElement {
     this.elements.forEach((element) => {
       element.removeAttribute(this.cacheKey);
       if (
-        element[this.attribute] &&
+        element[this.attribute] !== undefined &&
         element[this.defaultAttribute] !== element[this.attribute]
       ) {
         element.setAttribute(this.cacheKey, element[this.attribute]);
@@ -113,13 +113,16 @@ class FormElement {
 
   restore() {
     this.elements.forEach((element) => {
-      const cachedValue = element.getAttribute(this.cacheKey);
-      if (cachedValue) {
-        element[this.attribute] = cachedValue;
+      if (element.hasAttribute(this.cacheKey)) {
+        element[this.attribute] = this.cachedValue(element);
       }
     });
 
     return this;
+  }
+
+  cachedValue(element) {
+    return element.getAttribute(this.cacheKey);
   }
 
   get cacheKey() {
@@ -172,6 +175,10 @@ class FormCheckbox extends FormElement {
   get attribute() {
     return 'checked';
   }
+
+  cachedValue(element) {
+    return super.cachedValue(element) === 'true';
+  }
 }
 
 class FormRadio extends FormCheckbox {
@@ -195,6 +202,10 @@ class FormSelectOption extends FormElement {
 
   get attribute() {
     return 'selected';
+  }
+
+  cachedValue(element) {
+    return super.cachedValue(element) === 'true';
   }
 }
 

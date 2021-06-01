@@ -11,10 +11,11 @@ describe('FormController', () => {
           <input id="hidden" type="hidden" value="">
           <input id="password" type="password" value="">
           <input id="checkbox" type="checkbox" value="">
+          <input id="checkbox_checked" type="checkbox" value="" checked>
           <input id="radio1" type="radio" name="myRadio" value="1">
           <input id="radio2" type="radio" name="myRadio" value="2">
           <select id="cars">
-            <option value="volvo">Volvo</option>
+            <option value="volvo" selected>Volvo</option>
             <option value="saab">Saab</option>
             <option value="mercedes">Mercedes</option>
             <option value="audi">Audi</option>
@@ -133,6 +134,16 @@ describe('FormController', () => {
         expect(input.checked).toBeTruthy();
       });
 
+      it('caches checkbox unchecked input', () => {
+        const input = document.getElementById('checkbox_checked');
+        TurboBfcacheForm.load();
+        input.checked = false;
+        TurboBfcacheForm.change({ target: input });
+        input.checked = true;
+        TurboBfcacheForm.load();
+        expect(input.checked).toBeFalsy();
+      });
+
       it('caches radio group', () => {
         const input = document.getElementById('radio1');
         TurboBfcacheForm.load();
@@ -177,6 +188,7 @@ describe('FormController', () => {
         options[1].selected = false;
         options[3].selected = false;
         TurboBfcacheForm.load();
+        expect(options[0].selected).toBeFalsy();
         expect(options[1].selected).toBeTruthy();
         expect(options[3].selected).toBeTruthy();
       });
