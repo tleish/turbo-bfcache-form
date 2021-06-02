@@ -32,7 +32,7 @@ describe('FormController', () => {
         TurboBfcacheForm.load();
         input.value = 'test@email.com';
         TurboBfcacheForm.change({ target: input });
-        expect(input.dataset.turboBfcacheFormValue).toBe('test@email.com');
+        expect(input.dataset.turboBfcacheFormValue).toBe('"test@email.com"');
       });
 
       it('resets cached form as cached for optimization', () => {
