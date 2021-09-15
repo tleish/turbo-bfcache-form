@@ -11,7 +11,9 @@
 
 const DATA_TURBO_BFCACHE_FORM = 'data-turbo-bfcache-form';
 const DATA_TURBO_BFCACHE_FORM_VALUE = `${DATA_TURBO_BFCACHE_FORM}-value`;
+const DATA_TURBO_BFCACHE_FORM_ID = `${DATA_TURBO_BFCACHE_FORM}-id`;
 const DISABLE_BFCACHED_FORM_QUERY = `[data-turbo="false"],[${DATA_TURBO_BFCACHE_FORM}="false"]`;
+let bfcacheId;
 
 class TurboFormBfcache {
   static start() {
@@ -23,7 +25,7 @@ class TurboFormBfcache {
 
   // force onchange event if capture currently focused element, if user presses back/forward after entering
   // input and presses back or forward button before leaving field
-  static beforeCache() {
+  static beforeCache(_e) {
     if (document.activeElement.form) {
       // if active element is a form field
       FormElementFactory.cache(document.activeElement);
@@ -38,18 +40,19 @@ class TurboFormBfcache {
   }
 
   static load() {
+    bfcacheId = window.Turbo.navigator.history.restorationIdentifier;
     document
-      .querySelectorAll(`[${DATA_TURBO_BFCACHE_FORM_VALUE}]`)
+      .querySelectorAll(`[${DATA_TURBO_BFCACHE_FORM_ID}="${bfcacheId}"]`)
       .forEach((input) => {
         FormElementFactory.restore(input);
       });
   }
 
   static change(e) {
-    const turboCacheControl = new TurboCacheControl('bfcache');
-    const isFormElement = e.target.form || e.target.tagName.toLowerCase() === 'form';
-    if (isFormElement && turboCacheControl.allowCache) {
-      const turboForm = new TurboForm(e.target.form, turboCacheControl);
+    const turboCacheControl = new TurboCacheControl();
+    const form = (e.target.tagName.toLowerCase() === 'form') ? e.target : e.target.form;
+    if (form && turboCacheControl.allowCache) {
+      const turboForm = new TurboForm(form, turboCacheControl);
       turboForm.change(e);
     }
   }
@@ -69,10 +72,6 @@ class TurboForm {
 
 const TURBO_CACHE_CONTROL = 'turbo-cache-control';
 class TurboCacheControl {
-  constructor(dataTag = '') {
-    this.dataTag = dataTag;
-  }
-
   get allowCache() {
     return (this.metaTag() || {}).content !== 'no-cache';
   }
@@ -100,12 +99,14 @@ class FormElement {
   cache() {
     this.elements.forEach((element) => {
       element.removeAttribute(this.cacheKey);
+      element.removeAttribute(DATA_TURBO_BFCACHE_FORM_ID);
       if (
         element[this.attribute] !== undefined &&
         element[this.defaultAttribute] !== element[this.attribute]
       ) {
         const value = JSON.stringify(element[this.attribute]);
         element.setAttribute(this.cacheKey, value);
+        element.setAttribute(DATA_TURBO_BFCACHE_FORM_ID, bfcacheId);
       }
     });
 
@@ -116,6 +117,7 @@ class FormElement {
     this.elements.forEach((element) => {
       if (element.hasAttribute(this.cacheKey)) {
         element[this.attribute] = JSON.parse(element.getAttribute(this.cacheKey));
+        element.dispatchEvent(new CustomEvent('turbo-bfcache-form:change', { detail: {}, bubbles: true, cancelable: true }));
       }
     });
 

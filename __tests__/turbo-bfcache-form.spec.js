@@ -1,9 +1,16 @@
 import TurboBfcacheForm from 'turbo-bfcache-form';
 
 describe('FormController', () => {
-  let form, input;
+  let form, input, windowSpy;
   describe('load form page', () => {
     beforeEach(() => {
+      windowSpy = jest.spyOn(window, 'window', 'get');
+      windowSpy.mockImplementation(() => ({
+        Turbo: {
+          navigator: { history: { restorationIdentifier: 'abc123' } },
+        },
+      }));
+
       document.head.innerHTML = '';
       document.body.innerHTML = `
         <form id="form" data-controller="form">
@@ -27,12 +34,23 @@ describe('FormController', () => {
       input = document.getElementById('email');
     });
 
+    afterEach(() => {
+      windowSpy.mockRestore();
+    });
+
     describe('general caching', () => {
       it('caches form input', () => {
         TurboBfcacheForm.load();
         input.value = 'test@email.com';
         TurboBfcacheForm.change({ target: input });
         expect(input.dataset.turboBfcacheFormValue).toBe('"test@email.com"');
+      });
+
+      it('stores cache id', () => {
+        TurboBfcacheForm.load();
+        input.value = 'test@email.com';
+        TurboBfcacheForm.change({ target: input });
+        expect(input.dataset.turboBfcacheFormId).toBe('abc123');
       });
 
       it('resets cached form as cached for optimization', () => {
@@ -90,6 +108,21 @@ describe('FormController', () => {
       it('does not cache form when turbo disabled', () => {
         document.head.innerHTML =
           '<meta name="turbo-cache-control" content="no-cache">';
+      });
+    });
+
+    describe('no cache for new page', () => {
+      it('cached form a new page, not history', () => {
+        input.value = 'test@email.com';
+        TurboBfcacheForm.change({ target: input });
+        input.value = '';
+        windowSpy.mockImplementation(() => ({
+          Turbo: {
+            navigator: { history: { restorationIdentifier: 'xyz456' } },
+          },
+        }));
+        TurboBfcacheForm.load();
+        expect(input.value).toBe('');
       });
     });
 
